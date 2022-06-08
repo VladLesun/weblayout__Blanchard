@@ -265,6 +265,7 @@ let eventSlider = new Swiper(eventslider, {
     320: {
         slidesPerView: 1,
         spaceBetween: 30,
+        slidesPerGroup: 1
       },
 
     481: {
@@ -282,16 +283,19 @@ let eventSlider = new Swiper(eventslider, {
     1200: {
       slidesPerView: 3,
       spaceBetween: 20,
+      slidesPerGroup: 3
     },
 
     1440: {
       slidesPerView: 3,
       spaceBetween: 50,
+      slidesPerGroup: 3
     },
 
     1920: {
       slidesPerView: 3,
       spaceBetween: 50,
+      slidesPerGroup: 3
     }
   },
   a11y: false,
@@ -352,12 +356,15 @@ let projectSlider = new Swiper(projectslider, {
   breakpoints: {
     320: {
         slidesPerView: 1,
-        spaceBetween: 30,
       },
 
     481: {
+      slidesPerView: 1,
+    },
+
+    660: {
       slidesPerView: 2,
-      spaceBetween: 34,
+      spaceBetween: 25,
     },
 
     769: {
@@ -366,8 +373,8 @@ let projectSlider = new Swiper(projectslider, {
     },
 
     1200: {
-      slidesPerView: 3,
-      spaceBetween: 15,
+      slidesPerView: 2,
+      spaceBetween: 30,
     },
 
     1400: {
@@ -463,7 +470,10 @@ new JustValidate('.contacts__form', {
       name: {
         required: true,
         minLength: 3,
-        maxLength: 16
+        maxLength: 30,
+        strength: {
+          custom: '^[A-zА-яЁё]+$',
+        },
       },
       tel: {
         required: true,
@@ -479,6 +489,7 @@ new JustValidate('.contacts__form', {
     name: {
       required: 'Как вас зовут?',
       minLength: 'Введите 3 и более символов',
+      strength: 'Недопустимый формат'
     },
     tel: {
       required: 'Укажите ваш телефон',
