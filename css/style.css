@@ -1944,6 +1944,11 @@ ul {
   outline: 1px solid var(--border-color);
 }
 
+.events__card:last-child {
+  visibility: hidden;
+  display: block;
+}
+
 .events__pagination {
   display: flex;
   /* display: none; */
