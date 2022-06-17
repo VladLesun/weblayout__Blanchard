@@ -38,8 +38,8 @@ function setBurger(params) {
 
 // здесь мы вызываем функцию и передаем в нее классы наших элементов
 setBurger({
-  btnClass: "header-top__burger", // класс бургера
-  menuClass: "header-top__menu-wrap", // класс меню
+  btnClass: "header__top-burger", // класс бургера
+  menuClass: "header__top-menu", // класс меню
   menuLinksClass: "header-link",
   activeClass: "is-opened", // класс открытого состояния
   hiddenClass: "is-closed" // класс закрывающегося состояния (удаляется сразу после закрытия)
@@ -202,7 +202,7 @@ function onDisable(evt) {
 setMenuListener();
 
 
-const heroslider = document.querySelector('.hero__swiper');
+const heroslider = document.querySelector('.hero-swiper');
 const eventslider = document.querySelector('.events__swiper');
 const projectslider = document.querySelector('.project__swiper');
 
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       spaceBetween: 20,
       pagination: {
-        el: ".gallery__section .gallery__pagination",
+        el: ".gallery .gallery__pagination",
         type: "fraction"
       },
       navigation: {
@@ -301,6 +301,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+// MODAL
+const btnsModals = document.querySelectorAll('.gallery__slide');
+const modalOverlay = document.querySelector('.gallery__modal-overlay');
+const modals = document.querySelectorAll('.gallery__modal');
+const modalClose = document.querySelector('.gallery__modal-svg');
+
+btnsModals.forEach((el) => {
+  el.addEventListener('click', (e) => {
+    let path = e.currentTarget.getAttribute('data-path');
+
+    modals.forEach((el) => {
+      el.classList.remove('modal--visible');
+    });
+
+    document.querySelector(`[data-target="${path}"]`).classList.add('modal--visible');
+    modalOverlay.classList.add('modal-overlay--visible');
+
+  });
+});
+
+modalClose.addEventListener('click', (e) => {
+	// console.log(e.target);
+
+	if (e.target == modalClose) {
+		modalOverlay.classList.remove('modal-overlay--visible');
+		modals.forEach((el) => {
+			el.classList.remove('modal--visible');
+		});
+	}
+});
+
 // SLIDER events
 let eventSlider = new Swiper(eventslider, {
   grid: {
@@ -354,37 +385,6 @@ let eventSlider = new Swiper(eventslider, {
       slidesPerGroup: 3
     }
   },
-  a11y: false,
-  keyboard: {
-    enabled: true,
-    onlyInViewport: true
-  }, // можно управлять с клавиатуры стрелками влево/вправо
-
-  // Дальнейшие надстройки делают слайды вне области видимости не фокусируемыми
-  watchSlidesProgress: true,
-  watchSlidesVisibility: true,
-  slideVisibleClass: "slide-visible",
-
-  on: {
-    init: function () {
-      this.slides.forEach((slide) => {
-        if (!slide.classList.contains("slide-visible")) {
-          slide.tabIndex = "-1";
-        } else {
-          slide.tabIndex = "";
-        }
-      });
-    },
-    slideChange: function () {
-      this.slides.forEach((slide) => {
-        if (!slide.classList.contains("slide-visible")) {
-          slide.tabIndex = "-1";
-        } else {
-          slide.tabIndex = "";
-        }
-      });
-    }
-  }
 });
 
 // SELECT
@@ -407,7 +407,6 @@ let projectSlider = new Swiper(projectslider, {
     nextEl: ".project__btn-next",
     prevEl: ".project__btn-prev"
   },
-  loop: true,
 
   breakpoints: {
     320: {
@@ -420,7 +419,7 @@ let projectSlider = new Swiper(projectslider, {
 
     660: {
       slidesPerView: 2,
-      spaceBetween: 25,
+      spaceBetween: 33,
     },
 
     769: {
@@ -545,6 +544,7 @@ new JustValidate('.contacts__form', {
     name: {
       required: 'Как вас зовут?',
       minLength: 'Введите 3 и более символов',
+      maxLength: 'Слишком длинное имя',
       strength: 'Недопустимый формат'
     },
     tel: {
@@ -552,6 +552,25 @@ new JustValidate('.contacts__form', {
       // function: 'Здесь должно быть 10 символов без +7',
       function: 'Недопустимый формат',
     },
+  },
+
+  submitHandler: function(thisForm) {
+    let formData = new FormData(thisForm);
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          console.log('Отправлено');
+        }
+      }
+    }
+
+    xhr.open('POST', 'mail.php', true);
+    xhr.send(formData);
+
+    thisForm.reset();
   }
 });
 
